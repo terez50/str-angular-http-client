@@ -13,6 +13,8 @@ import { UserService } from './service/user.service';
     title = 'str-angular-http-client';
     userList$: Observable<User[]> = this.userService.getAll();
     cols: ITableCol[] = this.config.tableCols;
+    phrase: string = '';
+    key: string = 'last_name';
 
     constructor(
       private userService: UserService,

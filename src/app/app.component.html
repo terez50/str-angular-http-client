@@ -1,5 +1,12 @@
 <div class="container">
     <div class="row">
+        <div class="col-3 offset-9 mt-3">
+            <input
+              [(ngModel)] = "phrase"
+              type="text" class="form-control">
+        </div>
+    </div>
+    <div class="row">
         <div class="col-12">
             <table class="table table-striped">
                 <thead>
@@ -9,7 +16,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let user of userList$ | async">
+                    <tr *ngFor="let user of userList$ | async | filter:key:phrase">
                         <td *ngFor="let col of cols">
                             <input *ngIf = "col.editable"  [(ngModel)]="user[col.key]" type="text" class="form-control">
                             <!-- <input [(ngModel)]="user[col.key]" [readonly] = "!col.editable" type="text" class="form-control"> -->
