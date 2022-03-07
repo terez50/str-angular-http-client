@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { User } from '../model/user';
 
 @Injectable({
@@ -9,31 +9,39 @@ import { User } from '../model/user';
 export class UserService {
   apiUrl: string = 'http://localhost:3000/users';
 
+  // State
+  list$: Subject<User[]> = new Subject();
+
   constructor(
     private http: HttpClient
   ) { }
 
-  getAll(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+  getAll(): void {
+    this.http.get<User[]>(this.apiUrl).subscribe(
+      users => this.list$.next(users)
+    );
   }
 
   get(user: User): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${user.id}`);
   }
 
-  create(user: User): Observable<User> {
-    return this.http.post<User>(this.apiUrl, user);
+  create(user: User): void {
+    this.http.post<User>(this.apiUrl, user).subscribe(
+      () => this.getAll()
+    );
   }
 
-  update(user: User): Observable<User> {
-    // const id: number = user.id || 0;
-    // delete user.id;
-    // return this.http.patch<User>(`${this.apiUrl}/${id}`, user);
-    return this.http.patch<User>(`${this.apiUrl}/${user.id}`, user);
+  update(user: User): void {
+    this.http.patch<User>(`${this.apiUrl}/${user.id}`, user).subscribe(
+      () => this.getAll()
+    );
   }
-  
-  remove(user: User): Observable<User> {
-    return this.http.delete<User>(`${this.apiUrl}/${user.id}`);
+
+  remove(user: User): void {
+    this.http.delete<User>(`${this.apiUrl}/${user.id}`).subscribe(
+      () => this.getAll()
+    );
   }
 
 }

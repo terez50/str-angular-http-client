@@ -1,4 +1,9 @@
 <div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2>{{ (userList$ | async)?.length }} Users</h2>
+    </div>
+  </div>
     <div class="row">
       <div class="col-3 offset-6 mt-3">
         <select [(ngModel)] = "filterKey" class="form-control">

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { User } from './model/user';
 import { ConfigService, ITableCol } from './service/config.service';
@@ -9,10 +9,10 @@ import { UserService } from './service/user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-  export class AppComponent {
+  export class AppComponent implements OnInit {
     title = 'str-angular-http-client';
     // userList$: Observable<User[]> = this.userService.getAll();
-    userList$: Observable<User[]> = this.userService.getAll().pipe(
+    userList$: Observable<User[]> = this.userService.list$.pipe(
       map( users => users.filter( user => user.id > 20))
     );
     cols: ITableCol[] = this.config.tableCols;
@@ -27,16 +27,16 @@ import { UserService } from './service/user.service';
       // console.log(Object.entries(new User()));
     }
 
+    ngOnInit(): void {
+      this.userService.getAll();
+    }
+
     onUpdate(user: User): void {
-      this.userService.update(user).subscribe(
-        updatedUser => console.log(updatedUser)
-      );
+      this.userService.update(user);
     }
 
     onDelete(user: User): void {
-      this.userService.remove(user).subscribe(
-        () => console.log("deleted")
-      );
+      this.userService.remove(user);
     }
 
 }
