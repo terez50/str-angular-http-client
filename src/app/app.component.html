@@ -1,10 +1,20 @@
 <div class="container">
     <div class="row">
-        <div class="col-3 offset-9 mt-3">
-            <input
-              [(ngModel)] = "phrase"
-              type="text" class="form-control">
-        </div>
+      <div class="col-3 offset-6 mt-3">
+        <select [(ngModel)] = "filterKey" class="form-control">
+          <option *ngFor = "let col of cols" [value]="col.key">
+            {{ col.text }}
+          </option>
+          <!-- <option *ngFor = "let key of filterKeys" [value]="key">
+            {{ key }}
+          </option> -->
+        </select>
+      </div>
+      <div class="col-3 mt-3">
+        <input
+          [(ngModel)] = "phrase"
+          type="text" class="form-control">
+      </div>
     </div>
     <div class="row">
         <div class="col-12">
@@ -16,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let user of userList$ | async | filter:key:phrase">
+                    <tr *ngFor="let user of userList$ | async | filter:filterKey:phrase | slice:100:200">
                         <td *ngFor="let col of cols">
                             <input *ngIf = "col.editable"  [(ngModel)]="user[col.key]" type="text" class="form-control">
                             <!-- <input [(ngModel)]="user[col.key]" [readonly] = "!col.editable" type="text" class="form-control"> -->

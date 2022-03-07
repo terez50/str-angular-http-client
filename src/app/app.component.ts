@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { User } from './model/user';
 import { ConfigService, ITableCol } from './service/config.service';
 import { UserService } from './service/user.service';
@@ -11,15 +11,21 @@ import { UserService } from './service/user.service';
 })
   export class AppComponent {
     title = 'str-angular-http-client';
-    userList$: Observable<User[]> = this.userService.getAll();
+    // userList$: Observable<User[]> = this.userService.getAll();
+    userList$: Observable<User[]> = this.userService.getAll().pipe(
+      map( users => users.filter( user => user.id > 20))
+    );
     cols: ITableCol[] = this.config.tableCols;
     phrase: string = '';
-    key: string = 'last_name';
+    filterKey: string = 'last_name';
+    filterKeys: string[] = Object.keys(new User());
 
     constructor(
       private userService: UserService,
       private config: ConfigService
-    ) { }
+    ) {
+      // console.log(Object.entries(new User()));
+    }
 
     onUpdate(user: User): void {
       this.userService.update(user).subscribe(

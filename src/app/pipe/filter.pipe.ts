@@ -19,8 +19,8 @@ export class FilterPipe implements PipeTransform {
         // console.log('not number', ('' + item[key]).toLowerCase(), phrase, typeof item[key], typeof phrase, ('' + item[key]).toLowerCase().includes(phrase as string));
         return ('' + item[key]).toLowerCase().includes(phrase as string); // a TS miatt
       }
-      // console.log('number', item[key], phrase, typeof item[key], typeof phrase);
-      return item[key] === phrase;
+      console.log('number', item[key], phrase, typeof item[key], typeof phrase);
+      return ('' + item[key]) === phrase;
 
     });
   }
