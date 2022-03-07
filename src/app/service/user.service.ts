@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../model/user';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class UserService {
   apiUrl: string = 'http://localhost:3000/users';
 
   // State
-  list$: Subject<User[]> = new Subject();
+  list$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
 
   constructor(
     private http: HttpClient
