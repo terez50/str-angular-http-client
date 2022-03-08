@@ -1,57 +1,72 @@
 <div class="container">
   <div class="row">
-    <div class="col-12">
+    <div class="col-6 mt-3">
       <h2>{{ (userList$ | async)?.length }} Users</h2>
     </div>
+    <div class="col-6 mt-3">
+      <nav class="d-flex justify-content-end">
+        <ul class="pagination">
+          <li [class.disabled]="currentPage === 1" class="page-item">
+            <a (click)="onStepPage($event, -1)" class="page-link" href="#">Previous</a>
+          </li>
+          <li *ngFor="let btn of paginator" class="page-item" [class.active]="btn.page === currentPage">
+            <a (click)="onPaginate($event, btn)" class="page-link" href="#">
+              {{ btn.page }}
+            </a>
+          </li>
+          <li class="page-item">
+            <a (click)="onStepPage($event, 1)" class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
-    <div class="row">
-      <div class="col-3 offset-6 mt-3">
-        <select [(ngModel)] = "filterKey" class="form-control">
-          <option *ngFor = "let col of cols" [value]="col.key">
-            {{ col.text }}
-          </option>
-          <!-- <option *ngFor = "let key of filterKeys" [value]="key">
+  <div class="row">
+    <div class="col-3 offset-6">
+      <select [(ngModel)]="filterKey" class="form-control">
+        <option *ngFor="let col of cols" [value]="col.key">
+          {{ col.text }}
+        </option>
+        <!-- <option *ngFor = "let key of filterKeys" [value]="key">
             {{ key }}
           </option> -->
-        </select>
-      </div>
-      <div class="col-3 mt-3">
-        <input
-          [(ngModel)] = "phrase"
-          type="text" class="form-control">
-      </div>
+      </select>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th *ngFor="let col of cols">{{ col.text }}</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let user of userList$ | async | filter:filterKey:phrase | slice:100:200">
-                        <td *ngFor="let col of cols">
-                            <input *ngIf = "col.editable"  [(ngModel)]="user[col.key]" type="text" class="form-control">
-                            <!-- <input [(ngModel)]="user[col.key]" [readonly] = "!col.editable" type="text" class="form-control"> -->
-                            <span *ngIf = "!col.editable" type="text" class="form-control">{{ user[col.key]}}</span>
-                        </td>
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-info"
-                                    (click) = "onUpdate(user)">
-                                    <i class="fa fa-refresh"></i>
-                                </button>
-                                <button class="btn btn-danger"
-                                    (click) = "onDelete(user)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="col-3">
+      <input [(ngModel)]="phrase" type="text" class="form-control">
     </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th *ngFor="let col of cols">{{ col.text }}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr *ngFor="let user of userList$ | async | filter:filterKey:phrase:productsProperties | slice:pageSliceStart:pageSliceEnd"> -->
+          <tr
+            *ngFor="let user of userList$ | async | filter:filterKey:phrase:productsProperties | slice:pageSliceStart:pageSliceEnd">
+            <td *ngFor="let col of cols">
+              <input *ngIf="col.editable" [(ngModel)]="user[col.key]" type="text" class="form-control">
+              <!-- <input [(ngModel)]="user[col.key]" [readonly] = "!col.editable" type="text" class="form-control"> -->
+              <span *ngIf="!col.editable" type="text" class="form-control">{{ user[col.key]}}</span>
+            </td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-info" (click)="onUpdate(user)">
+                  <i class="fa fa-refresh"></i>
+                </button>
+                <button class="btn btn-danger" (click)="onDelete(user)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
